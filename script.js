@@ -168,7 +168,7 @@ function selectOption(optionElement) {
 
 // Submit Answer
 function submitAnswer() {
-    if (!selectedAnswer || isAnswered) return;
+    if (selectedAnswer === null || isAnswered) return;
     
     isAnswered = true;
     const currentQuestion = getCurrentQuestion();
@@ -176,10 +176,10 @@ function submitAnswer() {
     
     // Show correct/incorrect styling
     document.querySelectorAll('.option').forEach(option => {
-        const optionLetter = option.getAttribute('data-option');
-        if (optionLetter === correctAnswer) {
+        const optionIndex = parseInt(option.getAttribute('data-option'));
+        if (optionIndex === correctAnswer) {
             option.classList.add('correct');
-        } else if (optionLetter === selectedAnswer && optionLetter !== correctAnswer) {
+        } else if (optionIndex === parseInt(selectedAnswer) && optionIndex !== correctAnswer) {
             option.classList.add('incorrect');
         }
     });
@@ -189,7 +189,8 @@ function submitAnswer() {
     const correctAnswerDiv = answerSection.querySelector('.correct-answer');
     const explanationDiv = answerSection.querySelector('.explanation');
     
-    correctAnswerDiv.innerHTML = `<strong>Correct Answer: ${correctAnswer}) ${currentQuestion.options[correctAnswer]}</strong>`;
+    const correctOptionLetter = String.fromCharCode(65 + correctAnswer);
+    correctAnswerDiv.innerHTML = `<strong>Correct Answer: ${correctOptionLetter}) ${currentQuestion.options[correctAnswer]}</strong>`;
     explanationDiv.innerHTML = `<strong>Explanation:</strong> ${currentQuestion.explanation}`;
     
     answerSection.style.display = 'block';
@@ -243,36 +244,53 @@ function resetQuestionState() {
 // Load Question
 function loadQuestion() {
     const currentQuestion = getCurrentQuestion();
-    if (!currentQuestion) return;
+    if (!currentQuestion) {
+        console.error('No question found for section:', currentSection, 'difficulty:', currentDifficulty, 'index:', currentQuestionIndex);
+        return;
+    }
     
     // Update question counter
     const totalQuestions = getTotalQuestions();
-    document.querySelector('.current-question').textContent = currentQuestionIndex + 1;
-    document.querySelector('.total-questions').textContent = totalQuestions;
+    const currentQuestionElement = document.querySelector('.current-question');
+    const totalQuestionsElement = document.querySelector('.total-questions');
+    
+    if (currentQuestionElement) currentQuestionElement.textContent = currentQuestionIndex + 1;
+    if (totalQuestionsElement) totalQuestionsElement.textContent = totalQuestions;
     
     // Update difficulty badge
     const difficultyBadge = document.querySelector('.difficulty-badge');
-    difficultyBadge.className = `difficulty-badge ${currentDifficulty}`;
-    difficultyBadge.textContent = currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1);
+    if (difficultyBadge) {
+        difficultyBadge.className = `difficulty-badge ${currentDifficulty}`;
+        difficultyBadge.textContent = currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1);
+    }
     
     // Update question content
-    document.querySelector('.question-number').textContent = `Question ${currentQuestionIndex + 1}`;
-    document.getElementById('question-text').textContent = currentQuestion.question;
+    const questionNumberElement = document.querySelector('.question-number');
+    const questionTextElement = document.getElementById('question-text');
+    
+    if (questionNumberElement) questionNumberElement.textContent = `Question ${currentQuestionIndex + 1}`;
+    if (questionTextElement) questionTextElement.textContent = currentQuestion.question;
     
     // Update options
     const optionsContainer = document.getElementById('options');
-    optionsContainer.innerHTML = '';
+    if (optionsContainer) {
+        optionsContainer.innerHTML = '';
+        
+        currentQuestion.options.forEach((option, index) => {
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'option';
+            optionDiv.setAttribute('data-option', index);
+            optionDiv.innerHTML = `
+                <span class="option-letter">${String.fromCharCode(65 + index)}</span>
+                <span class="option-text">${option}</span>
+            `;
+            optionDiv.addEventListener('click', () => selectOption(optionDiv));
+            optionsContainer.appendChild(optionDiv);
+        });
+    }
     
-    Object.keys(currentQuestion.options).forEach(key => {
-        const optionDiv = document.createElement('div');
-        optionDiv.className = 'option';
-        optionDiv.setAttribute('data-option', key);
-        optionDiv.innerHTML = `
-            <span class="option-letter">${key}</span>
-            <span class="option-text">${currentQuestion.options[key]}</span>
-        `;
-        optionsContainer.appendChild(optionDiv);
-    });
+    // Reset question state
+    resetQuestionState();
     
     // Update navigation buttons
     updateNavigationButtons();
