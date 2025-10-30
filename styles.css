@@ -950,6 +950,7 @@ html {
 
 .modal-body {
     padding: 2rem;
+    padding-bottom: 1rem;
 }
 
 .modal-body p {
@@ -999,9 +1000,9 @@ html {
     margin-top: 2rem;
     padding-top: 1rem;
     border-top: 1px solid #e1e5e9;
-    position: sticky;
-    bottom: 0;
+    position: relative;
     background: white;
+    z-index: 10;
 }
 
 .btn-primary,

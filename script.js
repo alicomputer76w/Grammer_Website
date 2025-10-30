@@ -138,11 +138,11 @@ function switchDifficulty(difficulty) {
 // Quiz Controls Setup
 function setupQuizControls() {
     document.addEventListener('click', function(e) {
-        if (e.target.id === 'submit-btn') {
+        if (e.target.classList.contains('submit-btn')) {
             submitAnswer();
-        } else if (e.target.id === 'next-btn') {
+        } else if (e.target.classList.contains('next-btn')) {
             nextQuestion();
-        } else if (e.target.id === 'prev-btn') {
+        } else if (e.target.classList.contains('prev-btn')) {
             previousQuestion();
         } else if (e.target.classList.contains('option')) {
             selectOption(e.target);
@@ -195,12 +195,19 @@ function selectOption(optionElement) {
 function submitAnswer() {
     if (selectedAnswer === null || isAnswered) return;
     
+    // Get the active section container
+    const activeSection = document.getElementById(currentSection);
+    if (!activeSection) {
+        console.error('Active section not found:', currentSection);
+        return;
+    }
+    
     isAnswered = true;
     const currentQuestion = getCurrentQuestion();
     const correctAnswer = currentQuestion.correct;
     
     // Show correct/incorrect styling
-    document.querySelectorAll('.option').forEach(option => {
+    activeSection.querySelectorAll('.option').forEach(option => {
         const optionIndex = parseInt(option.getAttribute('data-option'));
         if (optionIndex === correctAnswer) {
             option.classList.add('correct');
@@ -210,19 +217,31 @@ function submitAnswer() {
     });
     
     // Show answer section
-    const answerSection = document.getElementById('answer-section');
+    const answerSection = activeSection.querySelector('.answer-section');
     const correctAnswerDiv = answerSection.querySelector('.correct-answer');
     const explanationDiv = answerSection.querySelector('.explanation');
     
+    // Handle both array and object format for options
+    let optionsArray = [];
+    if (Array.isArray(currentQuestion.options)) {
+        optionsArray = currentQuestion.options;
+    } else if (typeof currentQuestion.options === 'object') {
+        optionsArray = Object.values(currentQuestion.options);
+    }
+    
     const correctOptionLetter = String.fromCharCode(65 + correctAnswer);
-    correctAnswerDiv.innerHTML = `<strong>Correct Answer: ${correctOptionLetter}) ${currentQuestion.options[correctAnswer]}</strong>`;
+    const correctOptionText = optionsArray[correctAnswer] || 'N/A';
+    correctAnswerDiv.innerHTML = `<strong>Correct Answer: ${correctOptionLetter}) ${correctOptionText}</strong>`;
     explanationDiv.innerHTML = `<strong>Explanation:</strong> ${currentQuestion.explanation}`;
     
     answerSection.style.display = 'block';
     
     // Update buttons
-    document.getElementById('submit-btn').style.display = 'none';
-    document.getElementById('next-btn').style.display = 'inline-block';
+    const submitBtn = activeSection.querySelector('.submit-btn');
+    const nextBtn = activeSection.querySelector('.next-btn');
+    
+    if (submitBtn) submitBtn.style.display = 'none';
+    if (nextBtn) nextBtn.style.display = 'inline-block';
     
     // Update navigation buttons
     updateNavigationButtons();
@@ -252,18 +271,31 @@ function resetQuestionState() {
     selectedAnswer = null;
     isAnswered = false;
     
+    // Get the active section container
+    const activeSection = document.getElementById(currentSection);
+    if (!activeSection) {
+        console.error('Active section not found:', currentSection);
+        return;
+    }
+    
     // Reset option styling
-    document.querySelectorAll('.option').forEach(option => {
+    activeSection.querySelectorAll('.option').forEach(option => {
         option.classList.remove('selected', 'correct', 'incorrect');
     });
     
     // Hide answer section
-    document.getElementById('answer-section').style.display = 'none';
+    const answerSection = activeSection.querySelector('.answer-section');
+    if (answerSection) answerSection.style.display = 'none';
     
     // Reset buttons
-    document.getElementById('submit-btn').style.display = 'inline-block';
-    document.getElementById('submit-btn').disabled = true;
-    document.getElementById('next-btn').style.display = 'none';
+    const submitBtn = activeSection.querySelector('.submit-btn');
+    const nextBtn = activeSection.querySelector('.next-btn');
+    
+    if (submitBtn) {
+        submitBtn.style.display = 'inline-block';
+        submitBtn.disabled = true;
+    }
+    if (nextBtn) nextBtn.style.display = 'none';
 }
 
 // Load Question
@@ -274,34 +306,50 @@ function loadQuestion() {
         return;
     }
     
+    // Get the active section container
+    const activeSection = document.getElementById(currentSection);
+    if (!activeSection) {
+        console.error('Active section not found:', currentSection);
+        return;
+    }
+    
     // Update question counter
     const totalQuestions = getTotalQuestions();
-    const currentQuestionElement = document.querySelector('.current-question');
-    const totalQuestionsElement = document.querySelector('.total-questions');
+    const currentQuestionElement = activeSection.querySelector('.current-question');
+    const totalQuestionsElement = activeSection.querySelector('.total-questions');
     
     if (currentQuestionElement) currentQuestionElement.textContent = currentQuestionIndex + 1;
     if (totalQuestionsElement) totalQuestionsElement.textContent = totalQuestions;
     
     // Update difficulty badge
-    const difficultyBadge = document.querySelector('.difficulty-badge');
+    const difficultyBadge = activeSection.querySelector('.difficulty-badge');
     if (difficultyBadge) {
         difficultyBadge.className = `difficulty-badge ${currentDifficulty}`;
         difficultyBadge.textContent = currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1);
     }
     
     // Update question content
-    const questionNumberElement = document.querySelector('.question-number');
-    const questionTextElement = document.getElementById('question-text');
+    const questionNumberElement = activeSection.querySelector('.question-number');
+    const questionTextElement = activeSection.querySelector('.question-text');
     
     if (questionNumberElement) questionNumberElement.textContent = `Question ${currentQuestionIndex + 1}`;
     if (questionTextElement) questionTextElement.textContent = currentQuestion.question;
     
-    // Update options
-    const optionsContainer = document.getElementById('options');
+    // Update options - Handle both old and new format
+    const optionsContainer = activeSection.querySelector('.options');
     if (optionsContainer) {
         optionsContainer.innerHTML = '';
         
-        currentQuestion.options.forEach((option, index) => {
+        // Check if options is an array (new format) or object (old format)
+        let optionsArray = [];
+        if (Array.isArray(currentQuestion.options)) {
+            optionsArray = currentQuestion.options;
+        } else if (typeof currentQuestion.options === 'object') {
+            // Convert object format {A: "option1", B: "option2"} to array
+            optionsArray = Object.values(currentQuestion.options);
+        }
+        
+        optionsArray.forEach((option, index) => {
             const optionDiv = document.createElement('div');
             optionDiv.className = 'option';
             optionDiv.setAttribute('data-option', index);
@@ -323,21 +371,30 @@ function loadQuestion() {
 
 // Update Navigation Buttons
 function updateNavigationButtons() {
-    const prevBtn = document.getElementById('prev-btn');
+    // Get the active section container
+    const activeSection = document.getElementById(currentSection);
+    if (!activeSection) {
+        console.error('Active section not found:', currentSection);
+        return;
+    }
+    
+    const prevBtn = activeSection.querySelector('.prev-btn');
     const totalQuestions = getTotalQuestions();
     
-    prevBtn.disabled = currentQuestionIndex === 0;
+    if (prevBtn) prevBtn.disabled = currentQuestionIndex === 0;
     
     // Hide next button if it's the last question
-    const nextBtn = document.getElementById('next-btn');
-    if (currentQuestionIndex === totalQuestions - 1 && isAnswered) {
-        nextBtn.textContent = 'Quiz Complete';
-        nextBtn.onclick = function() {
-            alert('Quiz completed! Great job!');
-        };
-    } else {
-        nextBtn.textContent = 'Next Question';
-        nextBtn.onclick = nextQuestion;
+    const nextBtn = activeSection.querySelector('.next-btn');
+    if (nextBtn) {
+        if (currentQuestionIndex === totalQuestions - 1 && isAnswered) {
+            nextBtn.textContent = 'Quiz Complete';
+            nextBtn.onclick = function() {
+                alert('Quiz completed! Great job!');
+            };
+        } else {
+            nextBtn.textContent = 'Next Question';
+            nextBtn.onclick = nextQuestion;
+        }
     }
 }
 
