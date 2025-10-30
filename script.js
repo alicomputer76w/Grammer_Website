@@ -18,6 +18,7 @@ function initializeApp() {
     setupCategoryCards();
     setupDifficultyTabs();
     setupQuizControls();
+    initializeFeedbackSystem();
 }
 
 // Navigation Setup
@@ -583,59 +584,72 @@ function smoothScrollTo(element) {
 
 // Feedback System
 function initializeFeedbackSystem() {
-    const feedbackBtn = document.getElementById('feedback-btn');
-    const floatingFeedbackBtn = document.getElementById('floating-feedback');
-    const feedbackModal = document.getElementById('feedback-modal');
-    const closeModal = document.querySelector('.close-modal');
-    const cancelBtn = document.getElementById('cancel-feedback');
-    const feedbackForm = document.getElementById('feedback-form');
+    // Wait a bit to ensure DOM is fully loaded
+    setTimeout(() => {
+        const feedbackBtn = document.getElementById('feedback-btn');
+        const floatingFeedbackBtn = document.getElementById('floating-feedback');
+        const feedbackModal = document.getElementById('feedback-modal');
+        const closeModal = document.querySelector('.close-modal');
+        const cancelBtn = document.getElementById('cancel-feedback');
+        const feedbackForm = document.getElementById('feedback-form');
 
-    // Open modal event listeners
-    if (feedbackBtn) {
-        feedbackBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            openFeedbackModal();
+        // Debug logging for GitHub Pages
+        console.log('Feedback elements found:', {
+            feedbackBtn: !!feedbackBtn,
+            floatingFeedbackBtn: !!floatingFeedbackBtn,
+            feedbackModal: !!feedbackModal,
+            closeModal: !!closeModal,
+            cancelBtn: !!cancelBtn,
+            feedbackForm: !!feedbackForm
         });
-    }
 
-    if (floatingFeedbackBtn) {
-        floatingFeedbackBtn.addEventListener('click', function() {
-            openFeedbackModal();
-        });
-    }
+        // Open modal event listeners
+        if (feedbackBtn) {
+            feedbackBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                openFeedbackModal();
+            });
+        }
 
-    // Close modal event listeners
-    if (closeModal) {
-        closeModal.addEventListener('click', closeFeedbackModal);
-    }
+        if (floatingFeedbackBtn) {
+            floatingFeedbackBtn.addEventListener('click', function() {
+                openFeedbackModal();
+            });
+        }
 
-    if (cancelBtn) {
-        cancelBtn.addEventListener('click', closeFeedbackModal);
-    }
+        // Close modal event listeners
+        if (closeModal) {
+            closeModal.addEventListener('click', closeFeedbackModal);
+        }
 
-    // Close modal when clicking outside
-    if (feedbackModal) {
-        feedbackModal.addEventListener('click', function(e) {
-            if (e.target === feedbackModal) {
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', closeFeedbackModal);
+        }
+
+        // Close modal when clicking outside
+        if (feedbackModal) {
+            feedbackModal.addEventListener('click', function(e) {
+                if (e.target === feedbackModal) {
+                    closeFeedbackModal();
+                }
+            });
+        }
+
+        // Handle form submission
+        if (feedbackForm) {
+            feedbackForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleFeedbackSubmission();
+            });
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && feedbackModal && feedbackModal.style.display === 'block') {
                 closeFeedbackModal();
             }
         });
-    }
-
-    // Handle form submission
-    if (feedbackForm) {
-        feedbackForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            handleFeedbackSubmission();
-        });
-    }
-
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && feedbackModal && feedbackModal.style.display === 'block') {
-            closeFeedbackModal();
-        }
-    });
+    }, 100);
 }
 
 function openFeedbackModal() {
