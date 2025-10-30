@@ -27,8 +27,17 @@ function setupNavigation() {
     if (navLinks.length > 0) {
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                // Check if it's an external link (contains .html)
+                if (href.includes('.html')) {
+                    // Let the browser handle external links normally
+                    return;
+                }
+                
+                // Handle internal section navigation
                 e.preventDefault();
-                const targetSection = this.getAttribute('href').substring(1);
+                const targetSection = href.substring(1);
                 navigateToSection(targetSection);
             });
         });
@@ -40,13 +49,21 @@ function navigateToSection(sectionId) {
     document.querySelectorAll('.nav-link').forEach(link => {
         link.classList.remove('active');
     });
-    document.querySelector(`[href="#${sectionId}"]`).classList.add('active');
+    
+    const navLink = document.querySelector(`[href="#${sectionId}"]`);
+    if (navLink) {
+        navLink.classList.add('active');
+    }
     
     // Show target section
     document.querySelectorAll('.section').forEach(section => {
         section.classList.remove('active');
     });
-    document.getElementById(sectionId).classList.add('active');
+    
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
     
     currentSection = sectionId;
     
@@ -142,9 +159,16 @@ function initializeQuiz(sectionId) {
     
     // Reset difficulty tabs
     const section = document.getElementById(sectionId);
+    if (!section) {
+        console.error('Section not found:', sectionId);
+        return;
+    }
+    
     const tabs = section.querySelectorAll('.tab-btn');
     tabs.forEach(tab => tab.classList.remove('active'));
-    tabs[0].classList.add('active');
+    if (tabs.length > 0) {
+        tabs[0].classList.add('active');
+    }
     
     loadQuestion();
 }
