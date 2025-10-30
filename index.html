@@ -327,12 +327,24 @@
     </div>
 
     <!-- Floating Feedback Button -->
-    <div class="floating-feedback-btn" id="floating-feedback">
+    <div class="floating-feedback-btn" id="floating-feedback" onclick="openFeedbackModal()">
         <i class="fas fa-comment-dots"></i>
         <span>Feedback</span>
     </div>
 
     <script src="questions-bank.js"></script>
     <script src="script.js"></script>
+    
+    <!-- Fallback for GitHub Pages -->
+    <script>
+        // Ensure feedback system works even if main script fails
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (typeof initializeFeedbackSystem === 'function') {
+                    initializeFeedbackSystem();
+                }
+            }, 500);
+        });
+    </script>
 </body>
 </html>
