@@ -319,7 +319,13 @@ function updateNavigationButtons() {
 // Get Current Question
 function getCurrentQuestion() {
     const sectionQuestions = questionsData[currentSection];
-    if (!sectionQuestions || !sectionQuestions[currentDifficulty]) return null;
+    if (!sectionQuestions) {
+        return null;
+    }
+    
+    if (!sectionQuestions[currentDifficulty]) {
+        return null;
+    }
     
     return sectionQuestions[currentDifficulty][currentQuestionIndex];
 }

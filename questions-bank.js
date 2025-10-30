@@ -355,6 +355,70 @@ const QUESTIONS_BANK = {
                 correct: 1,
                 explanation: "Future-in-the-Past 'would' expresses temporal relationship (future from past perspective), while conditional 'would' expresses hypothetical or polite meaning."
             }
+        ],
+        medium: [
+            {
+                question: "Which sentence correctly uses the present perfect continuous tense?",
+                options: ["I have been studying for three hours", "I am studying for three hours", "I studied for three hours", "I will study for three hours"],
+                correct: 0,
+                explanation: "Present perfect continuous (have/has been + verb+ing) is used for actions that started in the past and continue to the present."
+            },
+            {
+                question: "Choose the correct past perfect form: 'By the time I arrived, they _____ already _____.'",
+                options: ["have, left", "had, left", "were, leaving", "are, leaving"],
+                correct: 1,
+                explanation: "Past perfect (had + past participle) is used for actions completed before another past action."
+            },
+            {
+                question: "What is the correct future continuous form?",
+                options: ["I will studying", "I will be study", "I will be studying", "I will have study"],
+                correct: 2,
+                explanation: "Future continuous is formed with 'will be + verb+ing' for actions that will be in progress at a specific future time."
+            },
+            {
+                question: "Select the sentence with correct present perfect usage:",
+                options: ["I have seen this movie yesterday", "I have seen this movie last week", "I have seen this movie before", "I have seen this movie two days ago"],
+                correct: 2,
+                explanation: "Present perfect is used with indefinite time expressions like 'before', 'already', 'yet', not with specific past time markers."
+            },
+            {
+                question: "Which shows the correct sequence of tenses?",
+                options: ["He said he will come tomorrow", "He said he would come tomorrow", "He said he comes tomorrow", "He said he came tomorrow"],
+                correct: 1,
+                explanation: "In reported speech, 'will' changes to 'would' when the reporting verb is in the past tense."
+            }
+        ],
+        hard: [
+            {
+                question: "Which sentence demonstrates the correct use of the future perfect continuous tense?",
+                options: ["By next year, I will have been working here for five years", "By next year, I will work here for five years", "By next year, I will be working here for five years", "By next year, I have been working here for five years"],
+                correct: 0,
+                explanation: "Future perfect continuous (will have been + verb+ing) shows an action that will continue up to a point in the future."
+            },
+            {
+                question: "Choose the sentence with the most appropriate tense sequence:",
+                options: ["If I knew you were coming, I would have prepared dinner", "If I had known you were coming, I would have prepared dinner", "If I know you were coming, I would prepare dinner", "If I will know you are coming, I will prepare dinner"],
+                correct: 1,
+                explanation: "Third conditional uses 'if + past perfect' with 'would have + past participle' for hypothetical past situations."
+            },
+            {
+                question: "What is the correct form for expressing habitual past actions that no longer occur?",
+                options: ["I was going to school every day", "I went to school every day", "I used to go to school every day", "I have gone to school every day"],
+                correct: 2,
+                explanation: "'Used to' is specifically used for past habits or states that no longer exist in the present."
+            },
+            {
+                question: "Which sentence correctly uses the past perfect continuous?",
+                options: ["I had been waiting for two hours when he arrived", "I was waiting for two hours when he arrived", "I have been waiting for two hours when he arrived", "I will have been waiting for two hours when he arrives"],
+                correct: 0,
+                explanation: "Past perfect continuous (had been + verb+ing) shows an ongoing action that was completed before another past action."
+            },
+            {
+                question: "Select the sentence with correct conditional perfect usage:",
+                options: ["If you would have called, I would come", "If you had called, I would have come", "If you have called, I would have come", "If you call, I would have come"],
+                correct: 1,
+                explanation: "Third conditional structure: If + past perfect, would have + past participle for unreal past conditions."
+            }
         ]
     },
     
@@ -492,9 +556,73 @@ const QUESTIONS_BANK = {
                 correct: 1,
                 explanation: "Direct speech presents the original commitment, while indirect speech reports that commitment, creating semantic distance from the original speaker's intention."
             }
+        ],
+        medium: [
+            {
+                question: "Convert: 'I may come tomorrow,' he said.",
+                options: ["He said he may come the next day", "He said he might come the next day", "He said he will come the next day", "He said he would come the next day"],
+                correct: 1,
+                explanation: "'May' changes to 'might' in indirect speech, and 'tomorrow' becomes 'the next day'."
+            },
+            {
+                question: "Change: 'Where have you been?' she asked me.",
+                options: ["She asked me where I have been", "She asked me where I had been", "She asked me where have I been", "She asked me where had I been"],
+                correct: 1,
+                explanation: "Present Perfect changes to Past Perfect in indirect speech, and question word order changes to statement order."
+            },
+            {
+                question: "Convert: 'Don't make noise,' the teacher told the students.",
+                options: ["The teacher told the students not to make noise", "The teacher told the students don't make noise", "The teacher told the students to not make noise", "The teacher said the students not to make noise"],
+                correct: 0,
+                explanation: "Negative commands use 'told + object + not to + base verb'."
+            },
+            {
+                question: "Change: 'I wish I were rich,' he said.",
+                options: ["He said he wished he was rich", "He said he wished he were rich", "He said he wishes he were rich", "He said he wish he were rich"],
+                correct: 1,
+                explanation: "In indirect speech, 'wish' remains unchanged when expressing hypothetical situations, and subjunctive 'were' is maintained."
+            },
+            {
+                question: "Convert: 'How beautiful the sunset is!' she exclaimed.",
+                options: ["She exclaimed that how beautiful the sunset was", "She exclaimed that the sunset was very beautiful", "She exclaimed how beautiful the sunset was", "She exclaimed the sunset is very beautiful"],
+                correct: 2,
+                explanation: "Exclamatory sentences starting with 'how' retain the structure but change tense: 'is' becomes 'was'."
+            }
+        ],
+        hard: [
+            {
+                question: "Convert: 'I would have helped you if you had asked me,' he said.",
+                options: ["He said he would have helped me if I had asked him", "He said he will have helped me if I had asked him", "He said he would help me if I had asked him", "He said he would have helped me if I have asked him"],
+                correct: 0,
+                explanation: "Third conditional remains unchanged in indirect speech, but pronouns change: 'you' to 'me', 'me' to 'him'."
+            },
+            {
+                question: "Change: 'Let's go to the cinema,' she suggested.",
+                options: ["She suggested to go to the cinema", "She suggested going to the cinema", "She suggested that we go to the cinema", "She suggested we should go to the cinema"],
+                correct: 1,
+                explanation: "For suggestions with 'Let's', we use 'suggested + gerund' (going) or 'suggested that + clause'."
+            },
+            {
+                question: "Convert: 'I'd rather you didn't smoke here,' he said.",
+                options: ["He said he'd rather I didn't smoke there", "He said he would rather I don't smoke there", "He said he'd rather I hadn't smoked there", "He said he would rather I didn't smoke here"],
+                correct: 0,
+                explanation: "'I'd rather you didn't' remains in the same form, but pronouns and place adverbs change: 'you' to 'I', 'here' to 'there'."
+            },
+            {
+                question: "Change: 'If only I had studied harder!' she regretted.",
+                options: ["She regretted that if only she had studied harder", "She regretted that she had not studied harder", "She regretted not having studied harder", "She regretted if only she had studied harder"],
+                correct: 2,
+                explanation: "Regret about past actions is expressed as 'regretted + not + gerund perfect' or 'regretted that + clause'."
+            },
+            {
+                question: "Convert: 'Would that I were young again!' he sighed.",
+                options: ["He sighed that he wished he were young again", "He sighed would that he were young again", "He sighed that would he were young again", "He sighed he would be young again"],
+                correct: 0,
+                explanation: "The archaic 'Would that' (expressing a wish) converts to 'wished that' in indirect speech."
+            }
         ]
     },
-    
+
     usage: {
         easy: [
             {
