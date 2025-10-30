@@ -1,0 +1,27 @@
+{
+  "name": "Grammar Master - English Grammar MCQs",
+  "short_name": "Grammar Master",
+  "description": "Master English grammar with 2000+ interactive MCQs. Practice parts of speech, tenses, narration, and usage.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "192-icon.ico",
+      "sizes": "192x192",
+      "type": "image/x-icon",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "512-icon.ico",
+      "sizes": "512x512",
+      "type": "image/x-icon",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "reference", "productivity"],
+  "lang": "en",
+  "dir": "ltr"
+}

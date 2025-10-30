@@ -178,8 +178,15 @@ function initializeQuiz(sectionId) {
 function selectOption(optionElement) {
     if (isAnswered) return;
     
-    // Remove previous selection
-    document.querySelectorAll('.option').forEach(opt => {
+    // Get the active section container
+    const activeSection = document.getElementById(currentSection);
+    if (!activeSection) {
+        console.error('Active section not found:', currentSection);
+        return;
+    }
+    
+    // Remove previous selection from active section only
+    activeSection.querySelectorAll('.option').forEach(opt => {
         opt.classList.remove('selected');
     });
     
@@ -187,8 +194,11 @@ function selectOption(optionElement) {
     optionElement.classList.add('selected');
     selectedAnswer = optionElement.getAttribute('data-option');
     
-    // Enable submit button
-    document.getElementById('submit-btn').disabled = false;
+    // Enable submit button in the active section
+    const submitBtn = activeSection.querySelector('.submit-btn');
+    if (submitBtn) {
+        submitBtn.disabled = false;
+    }
 }
 
 // Submit Answer
