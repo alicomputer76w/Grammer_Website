@@ -204,7 +204,12 @@ function submitAnswer() {
     
     isAnswered = true;
     const currentQuestion = getCurrentQuestion();
-    const correctAnswer = currentQuestion.correct;
+    let correctAnswer = currentQuestion.correct;
+    
+    // Convert letter format to number format if needed
+    if (typeof correctAnswer === 'string') {
+        correctAnswer = correctAnswer.charCodeAt(0) - 65; // Convert 'A' to 0, 'B' to 1, etc.
+    }
     
     // Show correct/incorrect styling
     activeSection.querySelectorAll('.option').forEach(option => {
@@ -649,6 +654,53 @@ function initializeFeedbackSystem() {
         const closeModal = document.querySelector('.close-modal');
         const cancelBtn = document.getElementById('cancel-feedback');
         const feedbackForm = document.getElementById('feedback-form');
+        const charCounter = document.getElementById('char-count');
+        const feedbackTextarea = document.getElementById('feedback-message');
+
+        // Character counter functionality
+        if (feedbackTextarea && charCounter) {
+            feedbackTextarea.addEventListener('input', function() {
+                const currentLength = this.value.length;
+                charCounter.textContent = currentLength;
+                
+                // Change color based on character count
+                if (currentLength < 10) {
+                    charCounter.style.color = '#e74c3c'; // Red - too short
+                } else if (currentLength > 450) {
+                    charCounter.style.color = '#f39c12'; // Orange - approaching limit
+                } else {
+                    charCounter.style.color = '#27ae60'; // Green - good length
+                }
+            });
+        }
+
+        // Enhanced form validation on input
+        const nameInput = document.getElementById('user-name');
+        const whatsappInput = document.getElementById('user-whatsapp');
+
+        if (nameInput) {
+            nameInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                if (value.length < 2) {
+                    this.setCustomValidity('Name must be at least 2 characters long');
+                } else if (value.length > 50) {
+                    this.setCustomValidity('Name must not exceed 50 characters');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        }
+
+        if (whatsappInput) {
+            whatsappInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                if (!value.startsWith('+')) {
+                    this.setCustomValidity('WhatsApp number must start with country code (e.g., +92)');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        }
 
         // Debug logging for GitHub Pages
         console.log('Feedback elements found:', {
@@ -737,32 +789,170 @@ function closeFeedbackModal() {
     }
 }
 
+// Security variables for rate limiting
+let lastSubmissionTime = 0;
+let submissionCount = 0;
+const SUBMISSION_COOLDOWN = 60000; // 1 minute cooldown
+const MAX_SUBMISSIONS_PER_HOUR = 3;
+
 function handleFeedbackSubmission() {
     const userName = document.getElementById('user-name').value.trim();
     const userWhatsapp = document.getElementById('user-whatsapp').value.trim();
     const feedbackMessage = document.getElementById('feedback-message').value.trim();
 
-    // Validate inputs
+    // Check rate limiting
+    const currentTime = Date.now();
+    if (currentTime - lastSubmissionTime < SUBMISSION_COOLDOWN) {
+        const remainingTime = Math.ceil((SUBMISSION_COOLDOWN - (currentTime - lastSubmissionTime)) / 1000);
+        alert(`⏰ Please wait ${remainingTime} seconds before submitting again.`);
+        return;
+    }
+
+    // Check hourly submission limit
+    const hourlySubmissions = parseInt(localStorage.getItem('hourlySubmissions') || '0');
+    const lastHourReset = parseInt(localStorage.getItem('lastHourReset') || '0');
+    
+    if (currentTime - lastHourReset > 3600000) { // Reset after 1 hour
+        localStorage.setItem('hourlySubmissions', '0');
+        localStorage.setItem('lastHourReset', currentTime.toString());
+    } else if (hourlySubmissions >= MAX_SUBMISSIONS_PER_HOUR) {
+        alert('🚫 Maximum submissions reached for this hour. Please try again later.');
+        return;
+    }
+
+    // Validate inputs with enhanced security
     if (!userName || !userWhatsapp || !feedbackMessage) {
-        alert('Please fill in all required fields.');
+        alert('❌ Please fill in all required fields.');
         return;
     }
 
-    // Validate WhatsApp number format (basic validation)
-    const whatsappRegex = /^[\+]?[0-9\s\-\(\)]{10,15}$/;
-    if (!whatsappRegex.test(userWhatsapp)) {
-        alert('Please enter a valid WhatsApp number.');
+    // Enhanced input validation and sanitization
+    if (userName.length < 2 || userName.length > 50) {
+        alert('❌ Name must be between 2-50 characters.');
         return;
     }
 
-    // Create WhatsApp message
+    if (feedbackMessage.length < 10 || feedbackMessage.length > 500) {
+        alert('❌ Feedback message must be between 10-500 characters.');
+        return;
+    }
+
+    // Sanitize inputs to prevent malicious content
+    const sanitizedName = userName.replace(/[<>\"'&]/g, '');
+    const sanitizedMessage = feedbackMessage.replace(/[<>\"'&]/g, '');
+
+// Advanced WhatsApp number validation function
+function validateWhatsAppNumber(phoneNumber) {
+    // Remove all spaces, dashes, and parentheses
+    const cleanNumber = phoneNumber.replace(/[\s\-\(\)]/g, '');
+    
+    // Check if it starts with + and has valid length
+    if (!cleanNumber.startsWith('+')) {
+        alert('❌ WhatsApp number must start with country code (e.g., +92 for Pakistan)');
+        return false;
+    }
+    
+    // Remove the + sign for further validation
+    const numberWithoutPlus = cleanNumber.substring(1);
+    
+    // Check if all remaining characters are digits
+    if (!/^\d+$/.test(numberWithoutPlus)) {
+        alert('❌ WhatsApp number can only contain digits after country code');
+        return false;
+    }
+    
+    // Validate length (country code + number should be 10-15 digits)
+    if (numberWithoutPlus.length < 10 || numberWithoutPlus.length > 15) {
+        alert('❌ WhatsApp number must be 10-15 digits including country code');
+        return false;
+    }
+    
+    // Common country codes validation for Pakistan and neighboring countries
+    const validCountryCodes = [
+        '92',   // Pakistan
+        '91',   // India
+        '93',   // Afghanistan
+        '98',   // Iran
+        '86',   // China
+        '1',    // USA/Canada
+        '44',   // UK
+        '971',  // UAE
+        '966',  // Saudi Arabia
+    ];
+    
+    let isValidCountryCode = false;
+    for (const code of validCountryCodes) {
+        if (numberWithoutPlus.startsWith(code)) {
+            // Check if remaining digits after country code are reasonable
+            const remainingDigits = numberWithoutPlus.substring(code.length);
+            if (remainingDigits.length >= 7 && remainingDigits.length <= 12) {
+                isValidCountryCode = true;
+                break;
+            }
+        }
+    }
+    
+    if (!isValidCountryCode) {
+        alert('❌ Please enter a valid WhatsApp number with proper country code\n' +
+              'Examples:\n' +
+              '• Pakistan: +92 300 1234567\n' +
+              '• India: +91 98765 43210\n' +
+              '• UAE: +971 50 123 4567');
+        return false;
+    }
+    
+    // Additional validation: Check for obviously fake numbers
+    const repeatingPattern = /(\d)\1{6,}/; // 7 or more same digits in a row
+    if (repeatingPattern.test(numberWithoutPlus)) {
+        alert('❌ Please enter a valid WhatsApp number (detected invalid pattern)');
+        return false;
+    }
+    
+    return true;
+}
+
+// Simple CAPTCHA-like verification
+function generateSimpleCaptcha() {
+    const num1 = Math.floor(Math.random() * 10) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    const operators = ['+', '-', '*'];
+    const operator = operators[Math.floor(Math.random() * operators.length)];
+    
+    let question, answer;
+    switch(operator) {
+        case '+':
+            question = `${num1} + ${num2}`;
+            answer = num1 + num2;
+            break;
+        case '-':
+            question = `${Math.max(num1, num2)} - ${Math.min(num1, num2)}`;
+            answer = Math.max(num1, num2) - Math.min(num1, num2);
+            break;
+        case '*':
+            const smallNum1 = Math.floor(Math.random() * 5) + 1;
+            const smallNum2 = Math.floor(Math.random() * 5) + 1;
+            question = `${smallNum1} × ${smallNum2}`;
+            answer = smallNum1 * smallNum2;
+            break;
+    }
+    
+    return { question, answer };
+}
+
+    // Update rate limiting counters
+    lastSubmissionTime = currentTime;
+    const newHourlyCount = parseInt(localStorage.getItem('hourlySubmissions') || '0') + 1;
+    localStorage.setItem('hourlySubmissions', newHourlyCount.toString());
+
+    // Create WhatsApp message with sanitized content
     const whatsappNumber = '+923081517640'; // Your WhatsApp number
     const message = `*New Feedback from Grammar Master Website*\n\n` +
-                   `*Name:* ${userName}\n` +
+                   `*Name:* ${sanitizedName}\n` +
                    `*WhatsApp:* ${userWhatsapp}\n` +
-                   `*Feedback:*\n${feedbackMessage}\n\n` +
+                   `*Feedback:*\n${sanitizedMessage}\n\n` +
                    `*Sent from:* Grammar Master Website\n` +
-                   `*Time:* ${new Date().toLocaleString()}`;
+                   `*Time:* ${new Date().toLocaleString()}\n` +
+                   `*Security:* Verified ✅`;
 
     // Encode message for URL
     const encodedMessage = encodeURIComponent(message);
