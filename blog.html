@@ -196,10 +196,11 @@
                 <div class="newsletter-content">
                     <h2>Stay Updated with Grammar Tips</h2>
                     <p>Get weekly grammar tips, new practice questions, and exclusive guides delivered to your inbox.</p>
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="Enter your email address" required>
-                        <button type="submit">Subscribe</button>
+                    <form class="newsletter-form" id="newsletter-form">
+                        <input type="email" id="newsletter-email" placeholder="Enter your email address" required>
+                        <button type="submit" id="newsletter-submit">Subscribe</button>
                     </form>
+                    <div id="newsletter-message" class="newsletter-message" style="display: none;"></div>
                 </div>
             </section>
         </div>
@@ -238,5 +239,73 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Newsletter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const newsletterForm = document.getElementById('newsletter-form');
+            const newsletterEmail = document.getElementById('newsletter-email');
+            const newsletterMessage = document.getElementById('newsletter-message');
+
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const email = newsletterEmail.value.trim();
+                    
+                    // Email validation
+                    if (!isValidEmail(email)) {
+                        showMessage('Please enter a valid email address.', 'error');
+                        return;
+                    }
+                    
+                    // Simulate newsletter subscription
+                    subscribeToNewsletter(email);
+                });
+            }
+
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            function subscribeToNewsletter(email) {
+                // Show loading state
+                const submitBtn = document.getElementById('newsletter-submit');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Subscribing...';
+                submitBtn.disabled = true;
+
+                // Simulate API call with setTimeout
+                setTimeout(() => {
+                    // Store email in localStorage (in real app, this would be sent to server)
+                    let subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
+                    
+                    if (subscribers.includes(email)) {
+                        showMessage('This email is already subscribed to our newsletter!', 'error');
+                    } else {
+                        subscribers.push(email);
+                        localStorage.setItem('newsletter_subscribers', JSON.stringify(subscribers));
+                        showMessage('Thank you for subscribing! You will receive our latest grammar tips and updates.', 'success');
+                        newsletterEmail.value = '';
+                    }
+                    
+                    // Reset button
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }, 1500);
+            }
+
+            function showMessage(message, type) {
+                newsletterMessage.textContent = message;
+                newsletterMessage.className = `newsletter-message ${type}`;
+                newsletterMessage.style.display = 'block';
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    newsletterMessage.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #2196f3;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Newsletter Subscription Test</h1>
+        
+        <div class="instructions">
+            <h3>Test Instructions:</h3>
+            <ol>
+                <li>Enter your email: <strong>we9191711@gmail.com</strong></li>
+                <li>Click Subscribe button</li>
+                <li>You should see a success message</li>
+                <li>Try subscribing again with same email to see duplicate message</li>
+                <li>Try with invalid email to see validation error</li>
+            </ol>
+        </div>
+
+        <section class="newsletter-section">
+            <div class="newsletter-content">
+                <h2>Stay Updated with Grammar Tips</h2>
+                <p>Get weekly grammar tips, new practice questions, and exclusive guides delivered to your inbox.</p>
+                <form class="newsletter-form" id="newsletter-form">
+                    <input type="email" id="newsletter-email" placeholder="Enter your email address" required>
+                    <button type="submit" id="newsletter-submit">Subscribe</button>
+                </form>
+                <div id="newsletter-message" class="newsletter-message" style="display: none;"></div>
+            </div>
+        </section>
+
+        <div class="instructions">
+            <h3>Stored Emails (Check Browser Console):</h3>
+            <button onclick="showStoredEmails()">Show Stored Emails</button>
+            <button onclick="clearStoredEmails()">Clear All Emails</button>
+            <div id="stored-emails" style="margin-top: 1rem; padding: 1rem; background: #f9f9f9; border-radius: 5px;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Newsletter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const newsletterForm = document.getElementById('newsletter-form');
+            const newsletterEmail = document.getElementById('newsletter-email');
+            const newsletterMessage = document.getElementById('newsletter-message');
+
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const email = newsletterEmail.value.trim();
+                    
+                    // Email validation
+                    if (!isValidEmail(email)) {
+                        showMessage('Please enter a valid email address.', 'error');
+                        return;
+                    }
+                    
+                    // Simulate newsletter subscription
+                    subscribeToNewsletter(email);
+                });
+            }
+
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            function subscribeToNewsletter(email) {
+                // Show loading state
+                const submitBtn = document.getElementById('newsletter-submit');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Subscribing...';
+                submitBtn.disabled = true;
+
+                // Simulate API call with setTimeout
+                setTimeout(() => {
+                    // Store email in localStorage (in real app, this would be sent to server)
+                    let subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
+                    
+                    if (subscribers.includes(email)) {
+                        showMessage('This email is already subscribed to our newsletter!', 'error');
+                    } else {
+                        subscribers.push(email);
+                        localStorage.setItem('newsletter_subscribers', JSON.stringify(subscribers));
+                        showMessage('Thank you for subscribing! You will receive our latest grammar tips and updates.', 'success');
+                        newsletterEmail.value = '';
+                    }
+                    
+                    // Reset button
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }, 1500);
+            }
+
+            function showMessage(message, type) {
+                newsletterMessage.textContent = message;
+                newsletterMessage.className = `newsletter-message ${type}`;
+                newsletterMessage.style.display = 'block';
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    newsletterMessage.style.display = 'none';
+                }, 5000);
+            }
+        });
+
+        // Helper functions for testing
+        function showStoredEmails() {
+            const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
+            const container = document.getElementById('stored-emails');
+            
+            if (subscribers.length === 0) {
+                container.innerHTML = '<p>No emails stored yet.</p>';
+            } else {
+                container.innerHTML = '<h4>Stored Emails:</h4><ul>' + 
+                    subscribers.map(email => `<li>${email}</li>`).join('') + 
+                    '</ul>';
+            }
+            
+            console.log('Stored newsletter subscribers:', subscribers);
+        }
+
+        function clearStoredEmails() {
+            localStorage.removeItem('newsletter_subscribers');
+            document.getElementById('stored-emails').innerHTML = '<p>All emails cleared!</p>';
+            console.log('Newsletter subscribers cleared');
+        }
+    </script>
+</body>
+</html>

@@ -1056,6 +1056,26 @@ body {
     background: #764ba2;
 }
 
+.newsletter-message {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.newsletter-message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.newsletter-message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
 /* MCQ Practice Guide Specific Styles */
 .strategy-section {
     margin: 3rem 0;
