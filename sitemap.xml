@@ -1,75 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- Main Pages -->
   <url>
     <loc>https://alicomputer76w.github.io/Grammer_Website/</loc>
-    <lastmod>2024-12-19</lastmod>
+    <lastmod>2024-12-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  
   <url>
     <loc>https://alicomputer76w.github.io/Grammer_Website/index.html</loc>
-    <lastmod>2024-12-19</lastmod>
+    <lastmod>2024-12-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  
   <url>
     <loc>https://alicomputer76w.github.io/Grammer_Website/about.html</loc>
-    <lastmod>2024-12-19</lastmod>
+    <lastmod>2024-12-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  <url>
-    <loc>https://alicomputer76w.github.io/Grammer_Website/privacy.html</loc>
-    <lastmod>2024-12-19</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
+  
   <url>
     <loc>https://alicomputer76w.github.io/Grammer_Website/blog.html</loc>
-    <lastmod>2024-12-19</lastmod>
+    <lastmod>2024-12-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+  
+  <url>
+    <loc>https://alicomputer76w.github.io/Grammer_Website/privacy.html</loc>
+    <lastmod>2024-12-30</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Blog Posts -->
   <url>
     <loc>https://alicomputer76w.github.io/Grammer_Website/blog/complete-guide-parts-of-speech.html</loc>
-    <lastmod>2024-12-19</lastmod>
+    <lastmod>2024-12-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
   <url>
     <loc>https://alicomputer76w.github.io/Grammer_Website/blog/english-tenses-explained.html</loc>
-    <lastmod>2024-12-19</lastmod>
+    <lastmod>2024-12-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
   <url>
     <loc>https://alicomputer76w.github.io/Grammer_Website/blog/how-to-practice-grammar-mcqs.html</loc>
-    <lastmod>2024-12-19</lastmod>
+    <lastmod>2024-12-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
   <url>
-    <loc>https://alicomputer76w.github.io/Grammer_Website/#parts-of-speech</loc>
-    <lastmod>2024-12-19</lastmod>
+    <loc>https://alicomputer76w.github.io/Grammer_Website/blog/direct-indirect-speech-rules.html</loc>
+    <lastmod>2024-12-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://alicomputer76w.github.io/Grammer_Website/blog/common-grammar-mistakes.html</loc>
+    <lastmod>2024-12-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://alicomputer76w.github.io/Grammer_Website/blog/grammar-for-competitive-exams.html</loc>
+    <lastmod>2024-12-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://alicomputer76w.github.io/Grammer_Website/blog/grammar-shortcuts-tricks.html</loc>
+    <lastmod>2024-12-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Quiz Sections (Internal Links) -->
+  <url>
+    <loc>https://alicomputer76w.github.io/Grammer_Website/index.html#parts-of-speech</loc>
+    <lastmod>2024-12-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+  
   <url>
-    <loc>https://alicomputer76w.github.io/Grammer_Website/#tenses</loc>
-    <lastmod>2024-12-19</lastmod>
+    <loc>https://alicomputer76w.github.io/Grammer_Website/index.html#tenses</loc>
+    <lastmod>2024-12-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+  
   <url>
-    <loc>https://alicomputer76w.github.io/Grammer_Website/#narration</loc>
-    <lastmod>2024-12-19</lastmod>
+    <loc>https://alicomputer76w.github.io/Grammer_Website/index.html#narration</loc>
+    <lastmod>2024-12-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+  
   <url>
-    <loc>https://alicomputer76w.github.io/Grammer_Website/#usage</loc>
-    <lastmod>2024-12-19</lastmod>
+    <loc>https://alicomputer76w.github.io/Grammer_Website/index.html#usage</loc>
+    <lastmod>2024-12-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+
 </urlset>
