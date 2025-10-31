@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Question Numbering</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .debug-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .question-item { margin: 10px 0; padding: 10px; background: #f5f5f5; }
+        .current { background: #e3f2fd; }
+    </style>
+</head>
+<body>
+    <h1>Question Numbering Debug</h1>
+    
+    <div class="debug-section">
+        <h2>Current Question Index Test</h2>
+        <p>Current Index: <span id="currentIndex">0</span></p>
+        <p>Display Number: <span id="displayNumber">1</span></p>
+        <button onclick="nextQuestion()">Next Question</button>
+        <button onclick="prevQuestion()">Previous Question</button>
+        <button onclick="resetIndex()">Reset</button>
+    </div>
+
+    <div class="debug-section">
+        <h2>Question List (First 10)</h2>
+        <div id="questionList"></div>
+    </div>
+
+    <script src="questions-bank.js"></script>
+    <script>
+        let currentIndex = 0;
+        let questions = [];
+
+        // Load questions from parts-of-speech easy category
+        if (typeof QUESTIONS_BANK !== 'undefined') {
+            questions = QUESTIONS_BANK['parts-of-speech']['easy'] || [];
+            console.log('Loaded questions:', questions.length);
+        }
+
+        function updateDisplay() {
+            document.getElementById('currentIndex').textContent = currentIndex;
+            document.getElementById('displayNumber').textContent = currentIndex + 1;
+            
+            // Update question list
+            const listContainer = document.getElementById('questionList');
+            listContainer.innerHTML = '';
+            
+            for (let i = 0; i < Math.min(10, questions.length); i++) {
+                const div = document.createElement('div');
+                div.className = 'question-item' + (i === currentIndex ? ' current' : '');
+                div.innerHTML = `
+                    <strong>Index: ${i} | Display: ${i + 1}</strong><br>
+                    ${questions[i] ? questions[i].question.substring(0, 100) + '...' : 'No question'}
+                `;
+                listContainer.appendChild(div);
+            }
+        }
+
+        function nextQuestion() {
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                updateDisplay();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateDisplay();
+            }
+        }
+
+        function resetIndex() {
+            currentIndex = 0;
+            updateDisplay();
+        }
+
+        // Initialize
+        updateDisplay();
+    </script>
+</body>
+</html>

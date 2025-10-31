@@ -262,22 +262,53 @@ function submitAnswer() {
     updateNavigationButtons();
 }
 
+// Navigation Functions with debounce mechanism
+let navigationDebounce = false;
+
 // Next Question
 function nextQuestion() {
+    // Prevent rapid successive clicks
+    if (navigationDebounce) {
+        console.log('Navigation blocked - debounce active');
+        return;
+    }
+    
     const totalQuestions = getTotalQuestions();
     if (currentQuestionIndex < totalQuestions - 1) {
+        navigationDebounce = true;
+        console.log(`Next question clicked - Current index: ${currentQuestionIndex}, Moving to: ${currentQuestionIndex + 1}`);
+        
         currentQuestionIndex++;
         resetQuestionState();
         loadQuestion();
+        
+        // Reset debounce after a short delay
+        setTimeout(() => {
+            navigationDebounce = false;
+        }, 300);
     }
 }
 
 // Previous Question
 function previousQuestion() {
+    // Prevent rapid successive clicks
+    if (navigationDebounce) {
+        console.log('Navigation blocked - debounce active');
+        return;
+    }
+    
     if (currentQuestionIndex > 0) {
+        navigationDebounce = true;
+        console.log(`Previous question clicked - Current index: ${currentQuestionIndex}, Moving to: ${currentQuestionIndex - 1}`);
+        
         currentQuestionIndex--;
         resetQuestionState();
         loadQuestion();
+        
+        // Reset debounce after a short delay
+        setTimeout(() => {
+            navigationDebounce = false;
+        }, 300);
     }
 }
 

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Numbering Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .question-display {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        .debug-info {
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Question Numbering Test</h1>
+    
+    <div class="debug-info">
+        <h3>Debug Information:</h3>
+        <p><strong>Current Section:</strong> <span id="current-section">parts-of-speech</span></p>
+        <p><strong>Current Difficulty:</strong> <span id="current-difficulty">easy</span></p>
+        <p><strong>Current Index:</strong> <span id="current-index">0</span></p>
+        <p><strong>Display Number:</strong> <span id="display-number">1</span></p>
+        <p><strong>Total Questions:</strong> <span id="total-questions">0</span></p>
+    </div>
+    
+    <div class="question-display">
+        <h2 id="question-number">Question 1</h2>
+        <p id="question-text">Loading...</p>
+        <div id="question-options"></div>
+    </div>
+    
+    <div class="controls">
+        <button onclick="previousQuestion()">Previous</button>
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="jumpToQuestion()">Jump to Random</button>
+    </div>
+    
+    <div class="debug-info">
+        <h3>Question Array Check:</h3>
+        <div id="array-check"></div>
+    </div>
+
+    <script src="questions-bank.js"></script>
+    <script>
+        let currentSection = 'parts-of-speech';
+        let currentDifficulty = 'easy';
+        let currentQuestionIndex = 0;
+        let questionsData = {};
+
+        function loadQuestionsData() {
+            questionsData = QUESTIONS_BANK;
+            console.log('Questions loaded:', questionsData);
+        }
+
+        function getCurrentQuestion() {
+            const sectionQuestions = questionsData[currentSection];
+            if (!sectionQuestions) {
+                console.log('No section questions for:', currentSection);
+                return null;
+            }
+            
+            if (!sectionQuestions[currentDifficulty]) {
+                console.log('No difficulty questions for:', currentDifficulty);
+                return null;
+            }
+            
+            const question = sectionQuestions[currentDifficulty][currentQuestionIndex];
+            console.log('Getting question at index:', currentQuestionIndex, 'Question:', question);
+            return question;
+        }
+
+        function getTotalQuestions() {
+            const sectionQuestions = questionsData[currentSection];
+            if (!sectionQuestions || !sectionQuestions[currentDifficulty]) return 0;
+            return sectionQuestions[currentDifficulty].length;
+        }
+
+        function updateDisplay() {
+            const question = getCurrentQuestion();
+            const totalQuestions = getTotalQuestions();
+            
+            // Update debug info
+            document.getElementById('current-section').textContent = currentSection;
+            document.getElementById('current-difficulty').textContent = currentDifficulty;
+            document.getElementById('current-index').textContent = currentQuestionIndex;
+            document.getElementById('display-number').textContent = currentQuestionIndex + 1;
+            document.getElementById('total-questions').textContent = totalQuestions;
+            
+            // Update question display
+            document.getElementById('question-number').textContent = `Question ${currentQuestionIndex + 1}`;
+            
+            if (question) {
+                document.getElementById('question-text').textContent = question.question;
+                
+                // Display options
+                const optionsDiv = document.getElementById('question-options');
+                optionsDiv.innerHTML = '';
+                question.options.forEach((option, index) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.textContent = `${index + 1}. ${option}`;
+                    optionsDiv.appendChild(optionDiv);
+                });
+            } else {
+                document.getElementById('question-text').textContent = 'Question not found!';
+                document.getElementById('question-options').innerHTML = '';
+            }
+            
+            // Check array continuity
+            checkArrayContinuity();
+        }
+
+        function checkArrayContinuity() {
+            const questions = questionsData[currentSection][currentDifficulty];
+            const checkDiv = document.getElementById('array-check');
+            let html = '<p>Checking questions around current index:</p>';
+            
+            for (let i = Math.max(0, currentQuestionIndex - 2); i <= Math.min(questions.length - 1, currentQuestionIndex + 2); i++) {
+                const exists = questions[i] ? '✓' : '✗';
+                const current = i === currentQuestionIndex ? ' <-- CURRENT' : '';
+                html += `<p>Index ${i} (Display ${i + 1}): ${exists}${current}</p>`;
+            }
+            
+            checkDiv.innerHTML = html;
+        }
+
+        function nextQuestion() {
+            const totalQuestions = getTotalQuestions();
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                updateDisplay();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                updateDisplay();
+            }
+        }
+
+        function jumpToQuestion() {
+            const totalQuestions = getTotalQuestions();
+            const randomIndex = Math.floor(Math.random() * totalQuestions);
+            currentQuestionIndex = randomIndex;
+            updateDisplay();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadQuestionsData();
+            updateDisplay();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Numbering Fix</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .debug-info { background: #f0f0f0; padding: 10px; margin: 10px 0; }
+        .question-display { background: #e8f4f8; padding: 15px; margin: 10px 0; }
+        button { padding: 10px 20px; margin: 5px; }
+        .console-log { background: #333; color: #0f0; padding: 10px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>Test Question Numbering Fix</h1>
+    
+    <div class="debug-info">
+        <h3>Current State:</h3>
+        <p><strong>Section:</strong> <span id="current-section">parts-of-speech</span></p>
+        <p><strong>Difficulty:</strong> <span id="current-difficulty">easy</span></p>
+        <p><strong>Question Index:</strong> <span id="current-index">0</span></p>
+        <p><strong>Question Number:</strong> <span id="question-number">1</span></p>
+    </div>
+    
+    <div class="question-display">
+        <h3 id="question-text">Loading question...</h3>
+        <div id="options"></div>
+    </div>
+    
+    <div>
+        <button id="prev-btn" onclick="testPrevious()">Previous</button>
+        <button id="next-btn" onclick="testNext()">Next</button>
+        <button onclick="clearConsole()">Clear Console</button>
+    </div>
+    
+    <div class="console-log" id="console-output">
+        <strong>Console Output:</strong><br>
+    </div>
+
+    <script src="questions-bank.js"></script>
+    <script>
+        // Test variables
+        let currentSection = 'parts-of-speech';
+        let currentDifficulty = 'easy';
+        let currentQuestionIndex = 0;
+        let navigationDebounce = false;
+        
+        // Override console.log to display in our test page
+        const originalConsoleLog = console.log;
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            const output = document.getElementById('console-output');
+            output.innerHTML += args.join(' ') + '<br>';
+            output.scrollTop = output.scrollHeight;
+        };
+        
+        function updateDisplay() {
+            document.getElementById('current-section').textContent = currentSection;
+            document.getElementById('current-difficulty').textContent = currentDifficulty;
+            document.getElementById('current-index').textContent = currentQuestionIndex;
+            document.getElementById('question-number').textContent = currentQuestionIndex + 1;
+            
+            // Load question
+            const questions = QUESTIONS_BANK[currentSection][currentDifficulty];
+            if (questions && questions[currentQuestionIndex]) {
+                const question = questions[currentQuestionIndex];
+                document.getElementById('question-text').textContent = `Question ${currentQuestionIndex + 1}: ${question.question}`;
+                
+                const optionsDiv = document.getElementById('options');
+                optionsDiv.innerHTML = '';
+                question.options.forEach((option, index) => {
+                    const div = document.createElement('div');
+                    div.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+                    optionsDiv.appendChild(div);
+                });
+            }
+        }
+        
+        function testNext() {
+            // Prevent rapid successive clicks
+            if (navigationDebounce) {
+                console.log('Navigation blocked - debounce active');
+                return;
+            }
+            
+            const totalQuestions = QUESTIONS_BANK[currentSection][currentDifficulty].length;
+            if (currentQuestionIndex < totalQuestions - 1) {
+                navigationDebounce = true;
+                console.log(`Next question clicked - Current index: ${currentQuestionIndex}, Moving to: ${currentQuestionIndex + 1}`);
+                
+                currentQuestionIndex++;
+                updateDisplay();
+                
+                // Reset debounce after a short delay
+                setTimeout(() => {
+                    navigationDebounce = false;
+                    console.log('Debounce reset - navigation enabled');
+                }, 300);
+            } else {
+                console.log('Already at last question');
+            }
+        }
+        
+        function testPrevious() {
+            // Prevent rapid successive clicks
+            if (navigationDebounce) {
+                console.log('Navigation blocked - debounce active');
+                return;
+            }
+            
+            if (currentQuestionIndex > 0) {
+                navigationDebounce = true;
+                console.log(`Previous question clicked - Current index: ${currentQuestionIndex}, Moving to: ${currentQuestionIndex - 1}`);
+                
+                currentQuestionIndex--;
+                updateDisplay();
+                
+                // Reset debounce after a short delay
+                setTimeout(() => {
+                    navigationDebounce = false;
+                    console.log('Debounce reset - navigation enabled');
+                }, 300);
+            } else {
+                console.log('Already at first question');
+            }
+        }
+        
+        function clearConsole() {
+            document.getElementById('console-output').innerHTML = '<strong>Console Output:</strong><br>';
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Test page loaded');
+            updateDisplay();
+        });
+    </script>
+</body>
+</html>
