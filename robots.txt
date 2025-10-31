@@ -4,6 +4,7 @@ Allow: /
 # Sitemaps
 Sitemap: https://alicomputer76w.github.io/Grammer_Website/sitemap.xml
 Sitemap: https://alicomputer76w.github.io/Grammer_Website/sitemap-index.xml
+Sitemap: https://alicomputer76w.github.io/Grammer_Website/sitemap.html
 
 # Crawl-delay for better server performance
 Crawl-delay: 1

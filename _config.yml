@@ -1,0 +1,41 @@
+# GitHub Pages Jekyll Configuration
+title: Grammar Master
+description: Master English Grammar with Interactive Quizzes and Comprehensive Lessons
+url: "https://alicomputer76w.github.io"
+baseurl: "/Grammer_Website"
+
+# Plugins
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+
+# Include XML files
+include:
+  - sitemap.xml
+  - sitemap-index.xml
+  - robots.txt
+  - .htaccess
+
+# Exclude development files
+exclude:
+  - debug-*.js
+  - debug-*.html
+  - test-*.html
+  - test-*.js
+  - export-questions.js
+  - generate-questions.js
+
+# Markdown settings
+markdown: kramdown
+highlighter: rouge
+
+# Permalink structure
+permalink: /:title/
+
+# Site settings
+timezone: UTC
+encoding: utf-8
+
+# SEO settings
+lang: en
+author: Grammar Master Team
