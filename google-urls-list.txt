@@ -1,0 +1,50 @@
+# Google Search Console - Manual URL Submission List
+# Copy and paste these URLs one by one in Google Search Console > URL Inspection > Request Indexing
+
+## Main Pages (High Priority)
+https://alicomputer76w.github.io/Grammer_Website/
+https://alicomputer76w.github.io/Grammer_Website/index.html
+https://alicomputer76w.github.io/Grammer_Website/blog.html
+https://alicomputer76w.github.io/Grammer_Website/about.html
+
+## Blog Posts (High Value Content)
+https://alicomputer76w.github.io/Grammer_Website/blog/complete-guide-parts-of-speech.html
+https://alicomputer76w.github.io/Grammer_Website/blog/english-tenses-explained.html
+https://alicomputer76w.github.io/Grammer_Website/blog/how-to-practice-grammar-mcqs.html
+https://alicomputer76w.github.io/Grammer_Website/blog/direct-indirect-speech-rules.html
+https://alicomputer76w.github.io/Grammer_Website/blog/common-grammar-mistakes.html
+https://alicomputer76w.github.io/Grammer_Website/blog/grammar-for-competitive-exams.html
+https://alicomputer76w.github.io/Grammer_Website/blog/grammar-shortcuts-tricks.html
+
+## Interactive Quiz Sections
+https://alicomputer76w.github.io/Grammer_Website/index.html#parts-of-speech
+https://alicomputer76w.github.io/Grammer_Website/index.html#tenses
+https://alicomputer76w.github.io/Grammer_Website/index.html#narration
+https://alicomputer76w.github.io/Grammer_Website/index.html#usage
+
+## Legal Pages
+https://alicomputer76w.github.io/Grammer_Website/privacy.html
+
+## Sitemaps
+https://alicomputer76w.github.io/Grammer_Website/sitemap.xml
+https://alicomputer76w.github.io/Grammer_Website/sitemap-index.xml
+
+## Instructions for Manual Submission:
+1. Go to Google Search Console
+2. Select your property: alicomputer76w.github.io/Grammer_Website
+3. Go to URL Inspection tool
+4. Paste each URL above one by one
+5. Click "Request Indexing" for each URL
+6. Wait for Google to process (can take 1-7 days)
+
+## Priority Order:
+1. Submit main pages first (homepage, blog, about)
+2. Then submit all blog posts
+3. Finally submit quiz sections and legal pages
+4. Submit sitemaps last
+
+## Additional Tips:
+- Submit 5-10 URLs per day to avoid rate limiting
+- Check back after 3-7 days to see indexing status
+- Resubmit any URLs that show errors
+- Monitor Google Search Console for crawl errors

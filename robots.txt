@@ -1,12 +1,41 @@
 User-agent: *
 Allow: /
 
-# Sitemap
+# Sitemaps
 Sitemap: https://alicomputer76w.github.io/Grammer_Website/sitemap.xml
+Sitemap: https://alicomputer76w.github.io/Grammer_Website/sitemap-index.xml
 
-# Crawl-delay
+# Crawl-delay for better server performance
 Crawl-delay: 1
 
-# Disallow certain directories
+# Disallow certain directories and files
 Disallow: /temp/
 Disallow: /admin/
+Disallow: /debug-*
+Disallow: /test-*
+Disallow: /*.js$
+Disallow: /export-questions.js
+Disallow: /generate-questions.js
+Disallow: /debug-comprehensive.js
+Disallow: /debug-question-numbering.js
+Disallow: /test-questions.js
+
+# Allow important files
+Allow: /sitemap.xml
+Allow: /sitemap-index.xml
+Allow: /robots.txt
+Allow: /manifest.json
+Allow: /*.css$
+Allow: /*.html$
+
+# Specific bot instructions
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+# Host directive (helps with canonicalization)
+Host: https://alicomputer76w.github.io
