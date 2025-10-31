@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Newsletter Test - Mobile & Laptop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .device-info {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #28a745;
+        }
+        
+        .device-info h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .info-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 5px;
+            border: 1px solid #e0e6ed;
+        }
+        
+        .newsletter-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e0e6ed;
+        }
+        
+        .newsletter-section h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .newsletter-section p {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            min-width: 250px;
+            padding: 1rem;
+            border: 2px solid #e0e6ed;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .newsletter-form input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .newsletter-form button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .newsletter-form button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .newsletter-form button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .newsletter-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 500;
+            text-align: center;
+            display: none;
+        }
+        
+        .newsletter-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .newsletter-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .test-section {
+            background: #e3f2fd;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        
+        .test-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .test-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .test-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .test-btn.primary {
+            background: #007bff;
+        }
+        
+        .test-btn.primary:hover {
+            background: #0056b3;
+        }
+        
+        .console-output {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 1rem;
+            border: 2px solid #333;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-indicator.online {
+            background: #28a745;
+        }
+        
+        .status-indicator.offline {
+            background: #dc3545;
+        }
+        
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .newsletter-form {
+                flex-wrap: nowrap;
+            }
+            
+            .newsletter-form input {
+                min-width: auto;
+            }
+            
+            .header h1 {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .newsletter-form {
+                flex-direction: column;
+                max-width: 100%;
+            }
+            
+            .newsletter-form input,
+            .newsletter-form button {
+                width: 100%;
+                margin: 0;
+                min-width: auto;
+            }
+            
+            .test-container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .test-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="header">
+            <h1>📧 Final Newsletter Test</h1>
+            <p>Comprehensive testing for Mobile & Laptop compatibility</p>
+        </div>
+        
+        <div class="device-info">
+            <h3><span class="status-indicator online"></span>Device Information</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Device Type:</strong>
+                    <span id="device-type">Detecting...</span>
+                </div>
+                <div class="info-item">
+                    <strong>Screen Size:</strong>
+                    <span id="screen-size">Detecting...</span>
+                </div>
+                <div class="info-item">
+                    <strong>Browser:</strong>
+                    <span id="browser-info">Detecting...</span>
+                </div>
+                <div class="info-item">
+                    <strong>Touch Support:</strong>
+                    <span id="touch-support">Detecting...</span>
+                </div>
+                <div class="info-item">
+                    <strong>Local Storage:</strong>
+                    <span id="storage-support">Detecting...</span>
+                </div>
+                <div class="info-item">
+                    <strong>Connection:</strong>
+                    <span id="connection-status">Detecting...</span>
+                </div>
+            </div>
+        </div>
+
+        <section class="newsletter-section">
+            <h2>📬 Newsletter Subscription</h2>
+            <p>Test with your email: <strong>we9191711@gmail.com</strong></p>
+            <form class="newsletter-form" id="newsletter-form">
+                <input type="email" id="newsletter-email" placeholder="Enter your email address" required>
+                <button type="submit" id="newsletter-submit">Subscribe</button>
+            </form>
+            <div id="newsletter-message" class="newsletter-message"></div>
+        </section>
+
+        <div class="test-section">
+            <h3>🧪 Test Scenarios</h3>
+            <div class="test-buttons">
+                <button class="test-btn primary" onclick="testUserEmail()">Test User Email</button>
+                <button class="test-btn" onclick="testValidEmail()">Test Valid Email</button>
+                <button class="test-btn" onclick="testInvalidEmail()">Test Invalid Email</button>
+                <button class="test-btn" onclick="testDuplicateEmail()">Test Duplicate</button>
+                <button class="test-btn" onclick="testEmptyEmail()">Test Empty Email</button>
+                <button class="test-btn" onclick="showStoredEmails()">Show Stored</button>
+                <button class="test-btn" onclick="clearAllData()">Clear Data</button>
+                <button class="test-btn" onclick="testFormValidation()">Test Validation</button>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Console Output & Logs</h3>
+            <div class="console-output" id="console-output">
+                <div style="color: #00ff00;">[System] Console initialized - Ready for testing...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced console logging system
+        (function() {
+            'use strict';
+            
+            const originalLog = console.log;
+            const originalError = console.error;
+            const originalWarn = console.warn;
+            const consoleOutput = document.getElementById('console-output');
+            
+            function addToConsoleOutput(message, type = 'log') {
+                const timestamp = new Date().toLocaleTimeString();
+                let color = '#00ff00';
+                let prefix = '[LOG]';
+                
+                switch(type) {
+                    case 'error':
+                        color = '#ff6b6b';
+                        prefix = '[ERROR]';
+                        break;
+                    case 'warn':
+                        color = '#ffa500';
+                        prefix = '[WARN]';
+                        break;
+                    case 'success':
+                        color = '#00ff88';
+                        prefix = '[SUCCESS]';
+                        break;
+                    case 'info':
+                        color = '#00bfff';
+                        prefix = '[INFO]';
+                        break;
+                }
+                
+                const logEntry = document.createElement('div');
+                logEntry.style.color = color;
+                logEntry.innerHTML = `[${timestamp}] ${prefix} ${message}`;
+                consoleOutput.appendChild(logEntry);
+                consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            }
+            
+            console.log = function(...args) {
+                originalLog.apply(console, args);
+                addToConsoleOutput(args.join(' '), 'log');
+            };
+            
+            console.error = function(...args) {
+                originalError.apply(console, args);
+                addToConsoleOutput(args.join(' '), 'error');
+            };
+            
+            console.warn = function(...args) {
+                originalWarn.apply(console, args);
+                addToConsoleOutput(args.join(' '), 'warn');
+            };
+            
+            // Custom logging functions
+            window.logSuccess = function(message) {
+                addToConsoleOutput(message, 'success');
+            };
+            
+            window.logInfo = function(message) {
+                addToConsoleOutput(message, 'info');
+            };
+
+            // Device information detection
+            function updateDeviceInfo() {
+                const deviceType = window.innerWidth <= 768 ? 'Mobile/Tablet' : 'Desktop/Laptop';
+                const screenSize = `${window.innerWidth}x${window.innerHeight}`;
+                const browser = navigator.userAgent.split(')')[0].split('(')[1] || 'Unknown';
+                const touchSupport = 'ontouchstart' in window ? 'Yes' : 'No';
+                const storageSupport = typeof(Storage) !== "undefined" ? 'Available' : 'Not Available';
+                const connectionStatus = navigator.onLine ? 'Online' : 'Offline';
+                
+                document.getElementById('device-type').textContent = deviceType;
+                document.getElementById('screen-size').textContent = screenSize;
+                document.getElementById('browser-info').textContent = browser;
+                document.getElementById('touch-support').textContent = touchSupport;
+                document.getElementById('storage-support').textContent = storageSupport;
+                document.getElementById('connection-status').textContent = connectionStatus;
+                
+                console.log(`🖥️ Device detected: ${deviceType} (${screenSize})`);
+            }
+
+            // Newsletter functionality
+            function initNewsletter() {
+                console.log('🚀 Initializing newsletter system...');
+                
+                const newsletterForm = document.getElementById('newsletter-form');
+                const newsletterEmail = document.getElementById('newsletter-email');
+                const newsletterMessage = document.getElementById('newsletter-message');
+
+                if (!newsletterForm || !newsletterEmail || !newsletterMessage) {
+                    console.error('❌ Newsletter elements not found!');
+                    return;
+                }
+
+                logSuccess('✅ All newsletter elements found successfully');
+                
+                // Form submission event
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    console.log('📝 Newsletter form submitted');
+                    
+                    const email = newsletterEmail.value.trim();
+                    console.log(`📧 Email entered: ${email}`);
+                    
+                    if (!isValidEmail(email)) {
+                        console.error('❌ Invalid email format');
+                        showMessage('Please enter a valid email address.', 'error');
+                        return;
+                    }
+                    
+                    logSuccess('✅ Email validation passed');
+                    subscribeToNewsletter(email);
+                });
+
+                function isValidEmail(email) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    const isValid = emailRegex.test(email);
+                    console.log(`🔍 Email validation: ${isValid} for "${email}"`);
+                    return isValid;
+                }
+
+                function subscribeToNewsletter(email) {
+                    console.log(`🔄 Starting subscription process for: ${email}`);
+                    
+                    const submitBtn = document.getElementById('newsletter-submit');
+                    const originalText = submitBtn.textContent;
+                    submitBtn.textContent = 'Subscribing...';
+                    submitBtn.disabled = true;
+
+                    setTimeout(() => {
+                        try {
+                            let subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
+                            console.log(`📋 Current subscribers: [${subscribers.join(', ')}]`);
+                            
+                            if (subscribers.includes(email)) {
+                                console.warn('⚠️ Email already exists in database');
+                                showMessage('This email is already subscribed to our newsletter!', 'error');
+                            } else {
+                                subscribers.push(email);
+                                localStorage.setItem('newsletter_subscribers', JSON.stringify(subscribers));
+                                logSuccess(`✅ Email added successfully! Total subscribers: ${subscribers.length}`);
+                                showMessage('Thank you for subscribing! You will receive our latest grammar tips and updates.', 'success');
+                                newsletterEmail.value = '';
+                            }
+                        } catch (error) {
+                            console.error('💥 Subscription error:', error);
+                            showMessage('Sorry, there was an error. Please try again.', 'error');
+                        }
+                        
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    }, 1500);
+                }
+
+                function showMessage(message, type) {
+                    console.log(`💬 Showing ${type} message: ${message}`);
+                    
+                    newsletterMessage.textContent = message;
+                    newsletterMessage.className = `newsletter-message ${type}`;
+                    newsletterMessage.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        newsletterMessage.style.display = 'none';
+                    }, 5000);
+                }
+
+                // Make functions globally available
+                window.newsletterFunctions = {
+                    isValidEmail,
+                    subscribeToNewsletter,
+                    showMessage
+                };
+
+                logSuccess('🎉 Newsletter system fully initialized');
+            }
+
+            // Initialize everything when DOM is ready
+            function initialize() {
+                updateDeviceInfo();
+                initNewsletter();
+                
+                // Update device info on resize
+                window.addEventListener('resize', updateDeviceInfo);
+                
+                // Connection status monitoring
+                window.addEventListener('online', () => {
+                    document.getElementById('connection-status').textContent = 'Online';
+                    logInfo('🌐 Connection restored');
+                });
+                
+                window.addEventListener('offline', () => {
+                    document.getElementById('connection-status').textContent = 'Offline';
+                    console.warn('📡 Connection lost');
+                });
+                
+                logSuccess('🌟 System fully initialized and ready for testing');
+            }
+
+            // Initialize when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initialize);
+            } else {
+                initialize();
+            }
+
+        })();
+
+        // Test functions
+        function testUserEmail() {
+            console.log('🧪 Testing user email: we9191711@gmail.com');
+            document.getElementById('newsletter-email').value = 'we9191711@gmail.com';
+            document.getElementById('newsletter-form').dispatchEvent(new Event('submit'));
+        }
+
+        function testValidEmail() {
+            console.log('🧪 Testing valid email');
+            document.getElementById('newsletter-email').value = 'test@example.com';
+            document.getElementById('newsletter-form').dispatchEvent(new Event('submit'));
+        }
+
+        function testInvalidEmail() {
+            console.log('🧪 Testing invalid email');
+            document.getElementById('newsletter-email').value = 'invalid-email';
+            document.getElementById('newsletter-form').dispatchEvent(new Event('submit'));
+        }
+
+        function testEmptyEmail() {
+            console.log('🧪 Testing empty email');
+            document.getElementById('newsletter-email').value = '';
+            document.getElementById('newsletter-form').dispatchEvent(new Event('submit'));
+        }
+
+        function testDuplicateEmail() {
+            console.log('🧪 Testing duplicate email');
+            localStorage.setItem('newsletter_subscribers', JSON.stringify(['we9191711@gmail.com']));
+            document.getElementById('newsletter-email').value = 'we9191711@gmail.com';
+            document.getElementById('newsletter-form').dispatchEvent(new Event('submit'));
+        }
+
+        function showStoredEmails() {
+            const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
+            console.log(`📋 Stored emails: [${subscribers.join(', ')}]`);
+            alert(`Stored emails (${subscribers.length}):\n${subscribers.length > 0 ? subscribers.join('\n') : 'None'}`);
+        }
+
+        function clearAllData() {
+            localStorage.removeItem('newsletter_subscribers');
+            console.log('🗑️ All newsletter data cleared');
+            logSuccess('✅ Newsletter data cleared successfully');
+        }
+
+        function testFormValidation() {
+            const form = document.getElementById('newsletter-form');
+            const email = document.getElementById('newsletter-email');
+            const button = document.getElementById('newsletter-submit');
+            
+            console.log('🔍 Form validation test results:', {
+                formExists: !!form,
+                emailExists: !!email,
+                buttonExists: !!button,
+                formValid: form && typeof form.checkValidity === 'function',
+                emailType: email && email.type,
+                buttonType: button && button.type,
+                emailRequired: email && email.required
+            });
+        }
+    </script>
+</body>
+</html>

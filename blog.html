@@ -238,74 +238,126 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
     <script>
-        // Newsletter functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const newsletterForm = document.getElementById('newsletter-form');
-            const newsletterEmail = document.getElementById('newsletter-email');
-            const newsletterMessage = document.getElementById('newsletter-message');
+        // Newsletter functionality - Standalone for blog.html
+        (function() {
+            'use strict';
+            
+            console.log('🚀 Newsletter script loaded for blog.html');
+            
+            // Wait for DOM to be ready
+            function initNewsletter() {
+                const newsletterForm = document.getElementById('newsletter-form');
+                const newsletterEmail = document.getElementById('newsletter-email');
+                const newsletterMessage = document.getElementById('newsletter-message');
 
-            if (newsletterForm) {
+                console.log('🔍 Newsletter elements check:', {
+                    form: !!newsletterForm,
+                    email: !!newsletterEmail,
+                    message: !!newsletterMessage
+                });
+
+                if (!newsletterForm || !newsletterEmail || !newsletterMessage) {
+                    console.error('❌ Newsletter elements not found!');
+                    return;
+                }
+
+                console.log('✅ All newsletter elements found, setting up functionality');
+                
+                // Form submission event
                 newsletterForm.addEventListener('submit', function(e) {
+                    console.log('📝 Newsletter form submitted');
                     e.preventDefault();
                     
                     const email = newsletterEmail.value.trim();
+                    console.log('📧 Email entered:', email);
                     
-                    // Email validation
                     if (!isValidEmail(email)) {
+                        console.log('❌ Invalid email format');
                         showMessage('Please enter a valid email address.', 'error');
                         return;
                     }
                     
-                    // Simulate newsletter subscription
+                    console.log('✅ Email validation passed');
                     subscribeToNewsletter(email);
                 });
-            }
 
-            function isValidEmail(email) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return emailRegex.test(email);
-            }
-
-            function subscribeToNewsletter(email) {
-                // Show loading state
+                // Button click event for additional compatibility
                 const submitBtn = document.getElementById('newsletter-submit');
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = 'Subscribing...';
-                submitBtn.disabled = true;
+                if (submitBtn) {
+                    submitBtn.addEventListener('click', function(e) {
+                        console.log('🖱️ Submit button clicked');
+                    });
+                }
 
-                // Simulate API call with setTimeout
-                setTimeout(() => {
-                    // Store email in localStorage (in real app, this would be sent to server)
-                    let subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
+                function isValidEmail(email) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    const isValid = emailRegex.test(email);
+                    console.log('🔍 Email validation:', isValid, 'for:', email);
+                    return isValid;
+                }
+
+                function subscribeToNewsletter(email) {
+                    console.log('🔄 Starting subscription for:', email);
                     
-                    if (subscribers.includes(email)) {
-                        showMessage('This email is already subscribed to our newsletter!', 'error');
-                    } else {
-                        subscribers.push(email);
-                        localStorage.setItem('newsletter_subscribers', JSON.stringify(subscribers));
-                        showMessage('Thank you for subscribing! You will receive our latest grammar tips and updates.', 'success');
-                        newsletterEmail.value = '';
-                    }
+                    const submitBtn = document.getElementById('newsletter-submit');
+                    const originalText = submitBtn.textContent;
+                    submitBtn.textContent = 'Subscribing...';
+                    submitBtn.disabled = true;
+
+                    setTimeout(() => {
+                        try {
+                            let subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
+                            console.log('📋 Current subscribers:', subscribers);
+                            
+                            if (subscribers.includes(email)) {
+                                console.log('⚠️ Email already exists');
+                                showMessage('This email is already subscribed to our newsletter!', 'error');
+                            } else {
+                                subscribers.push(email);
+                                localStorage.setItem('newsletter_subscribers', JSON.stringify(subscribers));
+                                console.log('✅ Email added successfully:', subscribers);
+                                showMessage('Thank you for subscribing! You will receive our latest grammar tips and updates.', 'success');
+                                newsletterEmail.value = '';
+                            }
+                        } catch (error) {
+                            console.error('💥 Subscription error:', error);
+                            showMessage('Sorry, there was an error. Please try again.', 'error');
+                        }
+                        
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    }, 1500);
+                }
+
+                function showMessage(message, type) {
+                    console.log('💬 Showing message:', message, 'Type:', type);
                     
-                    // Reset button
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                }, 1500);
+                    newsletterMessage.textContent = message;
+                    newsletterMessage.className = `newsletter-message ${type}`;
+                    newsletterMessage.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        newsletterMessage.style.display = 'none';
+                    }, 5000);
+                }
+
+                console.log('🎉 Newsletter system initialized successfully');
             }
 
-            function showMessage(message, type) {
-                newsletterMessage.textContent = message;
-                newsletterMessage.className = `newsletter-message ${type}`;
-                newsletterMessage.style.display = 'block';
-                
-                // Hide message after 5 seconds
-                setTimeout(() => {
-                    newsletterMessage.style.display = 'none';
-                }, 5000);
+            // Initialize when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initNewsletter);
+            } else {
+                initNewsletter();
             }
-        });
+
+            // Additional compatibility
+            window.addEventListener('load', function() {
+                console.log('🌟 Window fully loaded, newsletter ready for all devices');
+            });
+
+        })();
     </script>
 </body>
 </html>
